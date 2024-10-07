@@ -1,28 +1,6 @@
-import os
-import pickle
-import sys
-import time
-from datetime import datetime
-
 import numpy as np
-import pandas as pd
-import yaml
-from py_wake.deficit_models import (BastankhahGaussianDeficit, NOJDeficit,
-                                    TurboGaussianDeficit)
-from py_wake.deficit_models.deficit_model import (BlockageDeficitModel,
-                                                  WakeDeficitModel)
-from py_wake.flow_map import HorizontalGrid
-from py_wake.site._site import UniformSite
-from py_wake.superposition_models import SquaredSum, SuperpositionModel
-from py_wake.turbulence_models import TurbulenceModel
-from py_wake.utils.model_utils import get_models
-from py_wake.wind_farm_models import All2AllIterative, PropagateDownwind
-from py_wake.wind_farm_models.wind_farm_model import SimulationResult
-from py_wake.wind_turbines import WindTurbine
-from py_wake.wind_turbines.power_ct_functions import CubePowerSimpleCt
 from shapely.affinity import scale
 from shapely.geometry import Point, Polygon
-
 
 def scale_polygon(polygon, desired_area):
     current_polygon_area = polygon.area
