@@ -96,67 +96,64 @@ polygon = st.session_state.generated_data['polygon']
 wind_park = st.session_state.generated_data['wind_park']
 grid = st.session_state.generated_data['grid']
 
+fig = go.Figure()
+fig.add_trace(go.Scatter(
+    x=wind_park[0, :],
+    y=wind_park[1, :],
+    mode='markers',
+    marker=dict(size=10, color='blue', opacity=0.6),
+    name='Turbines'
+))
 
-if wind_park is not None and polygon is not None:
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=wind_park[0, :],
-        y=wind_park[1, :],
-        mode='markers',
-        marker=dict(size=10, color='blue', opacity=0.6),
-        name='Turbines'
-    ))
+x, y = polygon
+fig.add_trace(go.Scatter(
+    x=x, y=y,
+    mode='lines',
+    line=dict(color='red', width=2),
+    name='Polygon Boundary'
+))
 
-    x, y = polygon
-    fig.add_trace(go.Scatter(
-        x=x, y=y,
-        mode='lines',
-        line=dict(color='red', width=2),
-        name='Polygon Boundary'
-    ))
+# Update layout
+fig.update_layout(
+    title="Wind Park Layout",
+    xaxis_title="X/D",
+    yaxis_title="Y/D",
+    showlegend=True,
+    width=700,
+    height=700,
+    xaxis=dict(range=[-128, 0], scaleanchor="y", scaleratio=1),
+    yaxis=dict(range=[-256, 256])
+)
 
-    # Update layout
-    fig.update_layout(
-        title="Wind Park Layout",
-        xaxis_title="X/D",
-        yaxis_title="Y/D",
-        showlegend=True,
-        width=700,
-        height=700,
-        xaxis=dict(range=[-128, 0], scaleanchor="y", scaleratio=1),
-        yaxis=dict(range=[-256, 256])
-    )
-
-    # Display the plot
-    st.plotly_chart(fig)
-    st.write("This plot shows the generated wind farm layout. Blue dots represent wind turbines, and the red line outlines the polygon boundary of the wind farm.")
+# Display the plot
+st.plotly_chart(fig)
+st.write("This plot shows the generated wind farm layout. Blue dots represent wind turbines, and the red line outlines the polygon boundary of the wind farm.")
 
 st.header("2. Wind Farm Rasterization")
 
-if grid is not None:
-    fig = go.Figure()
-    heatmap = go.Heatmap(
-        z=grid,
-        colorscale='Viridis',  # You can change this to any colorscale you prefer
-        zmin=np.min(grid),
-        zmax=np.max(grid),
-        showscale=True,  # This will show the color scale bar
-        colorbar=dict(title='Bool'),  # Add a title to the color bar
-    )
-    fig.add_trace(heatmap)
+fig = go.Figure()
+heatmap = go.Heatmap(
+    z=grid,
+    colorscale='Viridis',  # You can change this to any colorscale you prefer
+    zmin=np.min(grid),
+    zmax=np.max(grid),
+    showscale=True,  # This will show the color scale bar
+    colorbar=dict(title='Bool'),  # Add a title to the color bar
+)
+fig.add_trace(heatmap)
 
-    fig.update_layout(
-        title="Wind Park Layout",
-        xaxis_title="X/D",
-        yaxis_title="Y/D",
-        showlegend=True,
-        width=700,
-        height=350,
-    )
+fig.update_layout(
+    title="Wind Park Layout",
+    xaxis_title="X/D",
+    yaxis_title="Y/D",
+    showlegend=True,
+    width=700,
+    height=350,
+)
 
-    # Display the plot
-    st.plotly_chart(fig)
-    st.write("This heatmap represents the rasterized wind farm layout. The colored areas indicate the presence of wind turbines.")
+# Display the plot
+st.plotly_chart(fig)
+st.write("This heatmap represents the rasterized wind farm layout. The colored areas indicate the presence of wind turbines.")
 
 st.header("3. Turbine Parameters and Wake Simulation")
 st.write("Adjust the turbine parameters and inflow conditions:")
