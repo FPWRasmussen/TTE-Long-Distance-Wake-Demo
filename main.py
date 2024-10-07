@@ -45,7 +45,7 @@ st.write("Adjust the parameters below to generate different wind farm layouts:")
 col1, col2 = st.columns(2)
 # First column of sliders
 with col1:
-    turbine_amount = st.slider("Turbine Amount", 1, 400, st.session_state.layout_params['turbine_amount'])
+    turbine_amount = st.slider("Turbine Amount", 10, 400, st.session_state.layout_params['turbine_amount'])
     turbine_spacing = st.slider("Turbine Spacing", 6.0, 12.0, st.session_state.layout_params['turbine_spacing'], 0.1)
     turbine_position_noise = st.slider("Turbine Position Noise", 0.0, 0.5, st.session_state.layout_params['turbine_position_noise'], 0.01)
 
