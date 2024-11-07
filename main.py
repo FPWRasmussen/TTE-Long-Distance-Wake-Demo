@@ -20,6 +20,28 @@ The process involves three main steps:
 2. Rasterizing the wind farm layout
 3. Simulating wake effects using a U-Net neural network
 """)
+
+st.header("1. Motivation")
+st.write("""
+Wind farm wake effects pose a significant challenge in the wind energy industry, impacting both energy production and project planning. Traditional approaches to wake modeling often focus on single-turbine or single-farm effects, but recent research has revealed a more complex reality:
+
+- Inter-farm wake effects can extend over 50 kilometers, particularly in stable atmospheric conditions
+- Current industry models frequently underestimate these long-distance wake impacts
+- Wake effects significantly influence farm-to-farm interactions in dense wind energy development zones
+- Advanced measurement techniques (satellite SAR, aircraft measurements, scanning lidar, and dual-Doppler radar) have revealed wake patterns previously unaccounted for
+- Understanding these effects is crucial for accurate energy yield assessments and optimal wind farm spacing
+
+This interactive tool demonstrates a novel approach to wake modeling using deep learning, allowing rapid simulation of wake effects for various wind farm configurations. Users can experiment with different layouts, turbine parameters, and atmospheric conditions to better understand wake behavior and its implications for wind farm design.
+""")
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.image("./images/example1.png", caption="Source: Hasager et al., Energies 2015, 8(6), 5413-5439", use_column_width=True)
+with col2:
+    st.image("./images/example2.png", caption="Source: Platis et al., Wind Energy 2020, 24(9), DOI: 10.1002/we.2568", use_column_width=True)
+with col3:
+    st.image("./images/example3.png", caption="Source: Cañadillas et al., Energies 2023, 16(7), 2949", use_column_width=True)
+
+
 # Create a session state to store the layout parameters and generated data
 if 'layout_params' not in st.session_state:
     st.session_state.layout_params = {
@@ -39,7 +61,7 @@ if 'generated_data' not in st.session_state:
 if 'first_run' not in st.session_state:
     st.session_state.first_run = True
 
-st.header("1. Wind Farm Layout Generation")
+st.header("2. Wind Farm Layout Generation")
 st.write("Adjust the parameters below to generate different wind farm layouts:")
 
 col1, col2 = st.columns(2)
@@ -129,7 +151,7 @@ fig.update_layout(
 st.plotly_chart(fig)
 st.write("This plot shows the generated wind farm layout. Blue dots represent wind turbines, and the red line outlines the polygon boundary of the wind farm.")
 
-st.header("2. Wind Farm Rasterization")
+st.header("3. Wind Farm Rasterization")
 
 fig = go.Figure()
 heatmap = go.Heatmap(
@@ -155,7 +177,7 @@ fig.update_layout(
 st.plotly_chart(fig)
 st.write("This heatmap represents the rasterized wind farm layout. The colored areas indicate the presence of wind turbines.")
 
-st.header("3. Turbine Parameters and Wake Simulation")
+st.header("4. Turbine Parameters and Wake Simulation")
 st.write("Adjust the turbine parameters and inflow conditions:")
 
 col1, col2 = st.columns(2)
@@ -230,6 +252,17 @@ fig.update_layout(
 st.plotly_chart(fig)
 st.write("This heatmap shows the simulated wake deficit across the wind farm. The colors represent the wind speed at different locations, with cooler colors indicating lower wind speeds due to wake effects.")
 
+
+st.header("5. Current Results")
+st.write("""
+         The current best model, trained using data from the Jensen, Bastankhah, and TurbOPark models, is shown below.
+         The results demonstrate strong accuracy in predicting wake velocity deficits for various wind farm sizes, layouts, and inflow conditions.
+         """)
+
+st.image("./images/wake_conference_2025.png", caption="""Velocity deficit [%] comparison for test wind parks (186, 154, and 160). 
+        Left column: TurbOPark Wake Deficit Model outputs. Middle column: Predictions from a U-Net trained on
+        the TurbOPark model. Right column: Percentage Point Error [%pt] between the TurbOPark
+        model and the U-Net predictions.""", use_column_width=True)
 
 st.subheader("Neural Network Architecture")
 st.image("./images/u_net.png", caption="U-Net neural network")
